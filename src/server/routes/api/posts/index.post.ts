@@ -4,7 +4,7 @@ import {postModel} from "../../../models/post.model";
 import {Post} from "../../../../generated/prisma/client";
 
 export default defineEventHandler(async (event) => {
-  //----> Get the author payload from the body.
+  //----> Get the post-payload from the body.
   const post = await readValidatedBody(event, postSchema.parse);
 
   //----> Create the new post.

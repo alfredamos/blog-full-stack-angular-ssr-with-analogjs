@@ -5,3 +5,4 @@ import {Component} from "@angular/core";
   standalone: true,
   template: `<p>Add Post</p>`
 })
+export default class AddPostPage {}

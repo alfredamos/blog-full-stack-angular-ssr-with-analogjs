@@ -1,10 +1,10 @@
 import {defineEventHandler, getRouterParam} from "h3";
-import {postModel} from "../../../../models/post.model";
+import {tokenModel} from "../../../models/token.model";
 
 export default defineEventHandler(async (event) => {
   //----> Get the user id from param.
   const userId = getRouterParam(event, 'userId') as string;
 
-  //----> Delete the post by user-id.
-  return await postModel.deletePostsByUserId(userId);
+  //----> Delete invalid tokens associated with user-id.
+  return await tokenModel.deleteInvalidTokensByUserId(userId);
 });

@@ -5,6 +5,6 @@ export default defineEventHandler(async (event) => {
   //----> Get the author id from param.
   const authorId = getRouterParam(event, 'authorId') as string;
 
-  //----> Get the post by user-id.
+  //----> Get the posts by author-id.
   return await postModel.getPostsByAuthorId(authorId);
 });

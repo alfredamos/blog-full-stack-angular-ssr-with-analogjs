@@ -13,8 +13,8 @@ class AuthorModel{
       throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
     }
 
-    //----> Delete author.
-    await prisma.author.delete({where:{userId}});
+    //----> Delete author and corresponding user.
+    await prisma.user.delete({where:{id: userId}});
 
     //----> Send back response.
     return new ResponseMessage("Author has been deleted successfully!", "success", StatusCodes.OK);
@@ -29,8 +29,8 @@ class AuthorModel{
       throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
     }
 
-    //----> Delete author.
-    await prisma.author.delete({where:{id}});
+    //----> Delete author and corresponding user.
+    await prisma.user.delete({where:{id: author.userId}});
 
     //----> Send back response.
     return new ResponseMessage("Author has been deleted successfully!", "success", StatusCodes.OK);
@@ -45,8 +45,8 @@ class AuthorModel{
       throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
     }
 
-    //----> Delete author.
-    await prisma.author.delete({where:{email}});
+    //----> Delete author and corresponding user.
+    await prisma.user.delete({where:{email}});
 
     //----> Send back response.
     return new ResponseMessage("Author has been deleted successfully!", "success", StatusCodes.OK);

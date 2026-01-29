@@ -41,7 +41,7 @@ class AuthModel {
     }
 
     //----> Hash the new password.
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
 
     //----> Save the changes in the database.
     await prisma.user.update({

@@ -1,10 +1,10 @@
 import {defineEventHandler, getRouterParam} from "h3";
-import {postModel} from "../../../models/post.model";
+import {userModel} from "../../../models/user.model";
 
 export default defineEventHandler(async (event) => {
-  //----> Get the post-id from param.
+  //----> Get the user id from param.
   const id = getRouterParam(event, 'id') as string;
 
-  //----> Get the post by id.
-  return await postModel.getPostById(id);
+  //----> Fetch the user by id.
+  return userModel.getUserById(id);
 });

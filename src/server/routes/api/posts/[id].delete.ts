@@ -4,7 +4,7 @@ import {postModel} from "../../../models/post.model";
 import {Post} from "../../../../generated/prisma/client";
 
 export default defineEventHandler(async (event) => {
-  //----> Get the author id from param.
+  //----> Get the post-id from param.
   const id = getRouterParam(event, 'id') as string;
 
   //----> Delete the post by id.
