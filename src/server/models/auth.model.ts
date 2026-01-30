@@ -19,7 +19,7 @@ import {Role, TokenType} from "../../generated/prisma/enums";
 import {fromEditUserProfileToUser, fromEditUserUserToAuthor} from "../utils/fromEditUserProfileToUser";
 import {tokenModel} from "./token.model";
 import {Token, User} from "../../generated/prisma/client";
-import {fromSignupUserToUser} from "../utils/fromSignupToUser";
+import {fromSignupUserToAuthor, fromSignupUserToUser} from "../utils/fromSignupToUser";
 
 
 class AuthModel {
@@ -46,7 +46,7 @@ class AuthModel {
     //----> Save the changes in the database.
     await prisma.user.update({
       where: {email},
-      data: {...user, password: hashedPassword}
+      data: {...user, password: hashedPassword} as User
     });
 
     //----> Send back response.
@@ -58,14 +58,12 @@ class AuthModel {
     //----> Get user session.
     const session = await this.getSession(event);
     if (!session) {
-      await sendRedirect(event, "/login");
-      return;
+     throw catchError(StatusCodes.UNAUTHORIZED, "Session is not found!");
     }
 
-    //-----> You must be an admin to change user role.
+    //-----> You must be an admin to change a user role.
     if (!session.isAdmin){
-      await sendRedirect(event, "/unauthorized");
-      return;
+      throw catchError(StatusCodes.FORBIDDEN, "You must be an admin to change a user role!");
     }
 
     //----> Destructure the payload.
@@ -78,7 +76,7 @@ class AuthModel {
     //----> Save the changes in the database.
     await prisma.user.update({
       where: {email},
-      data: {...user, role}
+      data: {...user, role} as User
     })
   }
 
@@ -94,14 +92,14 @@ class AuthModel {
       throw catchError(StatusCodes.UNAUTHORIZED, "invalid credentials!");
     }
 
-    //----> Get a user from signupUser and save it in database.
+    //----> Get a user from signupUser and save it in a database.
     const userToUpdate = fromEditUserProfileToUser(editUserProfile);
     userToUpdate.role = user.role;
     userToUpdate.id = user.id;
     userToUpdate.password = user.password;
     await prisma.user.update({where: {email}, data: {...userToUpdate}});
 
-    //----> Get author from signupUser and save it in database.
+    //----> Get author from signupUser and save it in a database.
     const author = await this.findAuthorByEmail(email);
     const authorToUpdate = fromEditUserUserToAuthor(editUserProfile);
     authorToUpdate.id = author.id;
@@ -117,8 +115,7 @@ class AuthModel {
     //----> Get a user session and check for null session.
     const session = await this.getSession(event);
     if (!session) {
-      await sendRedirect(event, "/login");
-      return
+     throw catchError(StatusCodes.UNAUTHORIZED, "Session is not found!");
     }
 
     //----> Get the current user.
@@ -149,8 +146,7 @@ class AuthModel {
 
     //----> Check for null session.
     if (!session) {
-      await sendRedirect(event, "/login");
-      return;
+      throw catchError(StatusCodes.UNAUTHORIZED, "Session is not found!");
     }
 
     //----> Revoke all valid tokens.
@@ -185,8 +181,7 @@ class AuthModel {
     //----> Check for existence of user.
     const user = await prisma.user.findUnique({where: {email}});
     if(user){
-      await sendRedirect(event, "/signup");
-      return;
+      throw catchError(StatusCodes.UNAUTHORIZED, "Invalid credentials! Email already exists!");
     }
 
     //----> Hash password.
@@ -198,7 +193,7 @@ class AuthModel {
     const newUser = await prisma.user.create({data: {...newUserToCreate}});
 
     //----> Get the author payload from signupUser and insert it in the database.
-    const authorToCreate = fromEditUserUserToAuthor(signupUser);
+    const authorToCreate = fromSignupUserToAuthor(signupUser);
     authorToCreate.userId = newUser.id;
     await prisma.author.create({data: {...authorToCreate}});
 
@@ -255,7 +250,7 @@ class AuthModel {
   }
 
   private async findUserByEmail(email: string){
-    const user = await prisma.user.findUnique({where:{email}});
+    const user = await prisma.user.findUnique({where:{email}, include: {author: true}});
 
     //----> Check for null user.
     if (!user) {

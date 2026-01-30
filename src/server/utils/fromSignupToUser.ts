@@ -22,7 +22,7 @@ export function fromSignupUserToAuthor(signupUser: SignupUser) : Author {
     phone: signupUser.phone,
     gender: signupUser.gender,
     dateOfBirth: new Date(signupUser.dateOfBirth),
-    age: new Date(signupUser.dateOfBirth).getFullYear() - new Date().getFullYear(),
+    age: new Date().getFullYear() - new Date(signupUser.dateOfBirth).getFullYear(),
     userId: undefined as unknown as string,
   }
 }

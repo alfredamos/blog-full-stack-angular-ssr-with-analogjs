@@ -9,15 +9,18 @@ import {
 } from '@angular/core';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideFileRouter, requestContextInterceptor } from '@analogjs/router';
+import { withComponentInputBinding } from "@angular/router";
+import {BrowserStorageService} from "./services/browser-storage-service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideFileRouter(),
+    provideFileRouter(withComponentInputBinding()),
     provideHttpClient(
       withFetch(),
       withInterceptors([requestContextInterceptor])
     ),
     provideClientHydration(withEventReplay()),
+    BrowserStorageService,
   ],
 };

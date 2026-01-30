@@ -1,8 +1,34 @@
-import {Component} from "@angular/core";
+import {Component, inject, OnInit, signal} from "@angular/core";
+import {AuthorsTable} from "../../components/authors-table/authors-table";
+import {Author} from "../../models/Author";
+import {AuthorDb} from "../../services/author-db";
+import {AuthorService} from "../../services/author-service";
 
 @Component({
   selector: "app-authors-list-page",
   standalone: true,
-  template:`<p>Authors page</p>`
+  imports: [
+    AuthorsTable
+  ],
+  template: `
+    <app-authors-table
+      [authors]="authors()"
+    />`
 })
-export default class AuthorsPage {}
+export default class AuthorsPage implements OnInit{
+  authors = signal<Author[]>([]);
+  authorDb = inject(AuthorDb);
+  authorService = inject(AuthorService);
+
+  async ngOnInit() {
+    const authors = await this.loadAuthors();
+    this.authors.set(authors);
+  }
+
+  async loadAuthors(){
+    const authorsDb = await this.authorDb.getAuthors();
+
+    return authorsDb ?? this.authorService.authors();
+  }
+
+}

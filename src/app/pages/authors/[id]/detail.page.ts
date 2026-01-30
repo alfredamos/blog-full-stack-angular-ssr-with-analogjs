@@ -1,8 +1,13 @@
 import {Component} from "@angular/core";
+import {DetailUser} from "../../../components/users/detail-user/detail-user";
 
 @Component({
   selector: "app-detail-author-page",
   standalone: true,
-  template:`<p>Detail Author</p>`
+  imports: [
+    DetailUser
+  ],
+  template: `
+    <app-user-detail/>`
 })
 export default class DeleteAuthorPage {}

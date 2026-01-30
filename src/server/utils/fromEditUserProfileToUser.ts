@@ -22,7 +22,7 @@ export function fromEditUserUserToAuthor(editUserProfile: EditUserProfile) : Aut
     phone: editUserProfile.phone,
     gender: editUserProfile.gender,
     dateOfBirth: new Date(editUserProfile.dateOfBirth),
-    age: new Date(editUserProfile.dateOfBirth).getFullYear() - new Date().getFullYear(),
+    age: new Date().getFullYear() - new Date(editUserProfile.dateOfBirth).getFullYear(),
     userId: undefined as unknown as string,
   }
 }
