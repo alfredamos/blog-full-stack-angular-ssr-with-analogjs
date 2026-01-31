@@ -9,7 +9,7 @@ import {ResponseMessage} from "../utils/responseMessage.util";
 class PostModel{
   async createPost(post: Post, event: H3Event){
     //----> Get the user session from the event.
-    const session = await authModel.getSession(event);
+    const session = authModel.getSession(event);
 
     //----> Check for null session.
     if (!session){

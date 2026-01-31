@@ -1,0 +1,180 @@
+import {inject, Injectable, signal} from '@angular/core';
+import {AuthService} from './auth-service';
+import {UserSession} from "../models/auth/UserSession";
+import {ResponseMessage} from "../models/ResponseMessage";
+import {User} from "../models/User";
+import {LoginUserModel} from "../models/auth/LoginUserModel";
+import {ChangeUserPasswordModel} from "../models/auth/ChangeUserPasswordModel";
+import {EditUserProfileModel} from "../models/auth/EditUserProfileModel";
+import {ChangeUserRole} from "../models/auth/ChangeUserRole";
+import {UserService} from "./user-service";
+import {SignupUserModel} from "../models/auth/SignupUserModel";
+import { ApiHttpClientService } from './api-http-client-service';
+
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthHttpClientDb {
+  public data = signal<UserSession | ResponseMessage | User | null>(null);
+  private isLoading = signal(false);
+  private error = signal<string | null>(null);
+
+  private apiHttpClientService = inject(
+    ApiHttpClientService,
+  ) as ApiHttpClientService<
+    | LoginUserModel
+    | ChangeUserPasswordModel
+    | EditUserProfileModel
+    | ChangeUserRole
+    | null
+  >;
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+
+  async changeUserPassword(changeUserPasswordModel: ChangeUserPasswordModel) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.patch<ResponseMessage>(
+        '/auth/changeUserPassword',
+        changeUserPasswordModel,
+      );
+      this.data.set(response() as ResponseMessage);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async changeUserRole(changeRoleOfUser: ChangeUserRole) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.patch<ResponseMessage>(
+        '/auth/change-role',
+        changeRoleOfUser,
+      );
+      this.data.set(response() as ResponseMessage);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async editProfileUser(editUserProfileModel: EditUserProfileModel) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.patch<ResponseMessage>(
+        '/auth/edit-profile',
+        editUserProfileModel,
+      );
+      this.data.set(response() as ResponseMessage);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async loginUser(loginUser: LoginUserModel) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.post<UserSession>(
+        '/auth/login',
+        loginUser,
+      );
+      this.updateSession(response() as UserSession);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  updateSession(session: UserSession) {
+    this.data.set(session);
+    this.authService.setSession(session);
+    this.authService.setLocalStorage(session);
+  }
+
+  async logoutUser() {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.post<UserSession>(
+        '/auth/logout',
+        null,
+      );
+      this.data.set(response() as UserSession);
+      this.removeStoresAndLocalStorages();
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async getCurrentUser() {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.get<User>('/auth/me');
+      this.updateCurrentUser(response() as User);
+      return response() as User;
+    } catch (err: any) {
+      this.error.set(err.message);
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  removeStoresAndLocalStorages() {
+    this.authService.removeSession();
+    this.userService.removeUsers();
+  }
+
+  async signupUser(signupUser: SignupUserModel) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.post<ResponseMessage>(
+        'auth/signup',
+        signupUser,
+      );
+      this.data.set(response() as ResponseMessage);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async refreshUserToken() {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.post<UserSession>(
+        '/auth/refresh',
+        null,
+      );
+      this.updateSession(response() as UserSession);
+    } catch (err: any) {
+      this.error.set(err.message);
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  updateCurrentUser(user: User) {
+    this.data.set(user);
+    this.authService.updateCurrentUser(user);
+    this.authService.setCurrentUserLocalStorage(user);
+  }
+}

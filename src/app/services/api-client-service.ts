@@ -21,7 +21,7 @@ export class ApiClientService<T> {
     let baseURL = '';
 
     if (isPlatformBrowser(this.platformId)) {
-      // In the browser, use relative path or proxy
+      // In the browser, use a relative path or proxy
       baseURL = '/api';
     } else {
       // On the server, use an absolute URL if needed (e.g., http://localhost:4000)

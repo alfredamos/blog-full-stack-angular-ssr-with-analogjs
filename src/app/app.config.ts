@@ -11,6 +11,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideFileRouter, requestContextInterceptor } from '@analogjs/router';
 import { withComponentInputBinding } from "@angular/router";
 import {BrowserStorageService} from "./services/browser-storage-service";
+import { authInterceptor } from 'src/interceptors/authInterceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideFileRouter(withComponentInputBinding()),
     provideHttpClient(
       withFetch(),
-      withInterceptors([requestContextInterceptor])
+      withInterceptors([requestContextInterceptor, authInterceptor])
     ),
     provideClientHydration(withEventReplay()),
     BrowserStorageService,
