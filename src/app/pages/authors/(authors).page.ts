@@ -3,6 +3,13 @@ import {AuthorsTable} from "../../components/authors-table/authors-table";
 import {Author} from "../../models/Author";
 import {AuthorDb} from "../../services/author-db";
 import {AuthorService} from "../../services/author-service";
+import { RouteMeta } from '@analogjs/router';
+import {authGuard} from "../../guards/authGuard.guard"
+import {adminGuard} from "../../guards/adminGuard.guard"
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard, adminGuard],
+};
 
 @Component({
   selector: "app-authors-list-page",

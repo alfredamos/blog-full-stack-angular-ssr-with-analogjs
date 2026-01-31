@@ -2,10 +2,10 @@ import {z} from 'zod';
 import {Gender} from "../../generated/prisma/enums";
 
 export const changeUserPasswordSchema = z.object({
-  email: z.string().min(1, {message: 'Please enter a valid email address'}).regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
-  password: z.string().min(1, {message: 'Please enter a valid password'}),
-  newPassword: z.string().min(1, {message: 'Please enter a new password'}),
-  confirmPassword: z.string().min(1, {message: 'Please confirm your password'}),
+  email: z.string().min(1, {message: 'Email is required!'}).regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {message: 'Please enter a valid email address!'}),
+  password: z.string().min(1, {message: 'Password is required!'}),
+  newPassword: z.string().min(1, {message: 'New password is required!'}),
+  confirmPassword: z.string().min(1, {message: 'Confirm password is required!'}),
 }).refine((values) => values.newPassword.normalize() === values.confirmPassword.normalize(), {
     message: "Passwords do not match",
     path: ["confirmPassword"], // Associates the error with the confirmPassword field

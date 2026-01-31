@@ -56,7 +56,7 @@ class AuthModel {
 
   async changeUserRole(changeUserRole: ChangeUserRole, event: H3Event) {
     //----> Get user session.
-    const session = await this.getSession(event);
+    const session = this.getSession(event);
     if (!session) {
      throw catchError(StatusCodes.UNAUTHORIZED, "Session is not found!");
     }
@@ -113,7 +113,7 @@ class AuthModel {
 
   async getCurrentUser(event: H3Event) {
     //----> Get a user session and check for null session.
-    const session = await this.getSession(event);
+    const session = this.getSession(event);
     if (!session) {
      throw catchError(StatusCodes.UNAUTHORIZED, "Session is not found!");
     }
@@ -142,7 +142,7 @@ class AuthModel {
 
   async logoutUser(event: H3Event) {
     //----> Get user-session.
-    const session = await this.getSession(event);
+    const session = this.getSession(event);
 
     //----> Check for null session.
     if (!session) {
@@ -201,14 +201,13 @@ class AuthModel {
     return new ResponseMessage("User created successfully!", "success", StatusCodes.CREATED);
   }
 
-  async getSession(event: H3Event){
+  getSession(event: H3Event){
     //----> Get the session string from cookies.
     const cookies = parseCookies(event);
     const accessToken = cookies[CookieParam.accessTokenName]
 
     if(!accessToken){
-      await sendRedirect(event, "/login");
-      return;
+     return null;
     }
 
     //----> Validate session.
@@ -250,7 +249,7 @@ class AuthModel {
   }
 
   private async findUserByEmail(email: string){
-    const user = await prisma.user.findUnique({where:{email}, include: {author: true}});
+    const user = await prisma.user.findUnique({where:{email}});
 
     //----> Check for null user.
     if (!user) {

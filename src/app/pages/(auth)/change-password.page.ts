@@ -4,6 +4,12 @@ import {Router} from "@angular/router";
 import {AuthDb} from "../../services/auth-db";
 import {AuthService} from "../../services/auth-service";
 import {ChangeUserPasswordModel} from "../../models/auth/ChangeUserPasswordModel";
+import { RouteMeta } from '@analogjs/router';
+import {authGuard} from "../../guards/authGuard.guard"
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard],
+};
 
 @Component({
   selector: 'app-change-password-page',

@@ -41,10 +41,11 @@ model Author {
 }
 
 model Post {
-  id       String @id @default(uuid())
-  title    String @db.VarChar(255)
-  imageUrl String @db.VarChar(255)
-  content  String @db.Text
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(255)
+  imageUrl    String   @db.VarChar(255)
+  content     String   @db.Text
+  dateAndTime DateTime @default(now())
 
   Author   Author? @relation(fields: [authorId], references: [id])
   authorId String?

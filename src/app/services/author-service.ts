@@ -22,7 +22,7 @@ export class AuthorService {
   }
 
   findAuthorById(id: string) {
-    return (this.authorsState()?.find(author => author.id === id) ?? this.getLocalStorage()?.find(author => author.id === id)) as Author;
+    return (this.authorsState()?.find(author => author.id === id));
   }
 
   setLocalStorage(authors: Author[]) {

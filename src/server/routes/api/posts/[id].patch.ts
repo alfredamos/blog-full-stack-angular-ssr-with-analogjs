@@ -10,6 +10,9 @@ export default defineEventHandler(async (event) => {
   //----> Get the post-payload from the body.
   const post = await readValidatedBody(event, postSchema.parse);
 
+  //----> Update the date and time of the post.
+  //post.dateAndTime = new Date().toLocaleString();
+
   //----> Edit the post with the given id.
   return await postModel.editPostById(id, post as Post);
 });

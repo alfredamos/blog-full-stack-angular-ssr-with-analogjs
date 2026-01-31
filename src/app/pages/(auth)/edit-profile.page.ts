@@ -5,6 +5,11 @@ import {AuthService} from "../../services/auth-service";
 import {Router} from "@angular/router";
 import {EditProfileForm} from "../../components/auth/edit-profile-form/edit-profile-form";
 import {EditUserProfileModel} from "../../models/auth/EditUserProfileModel";
+import {authGuard} from "../../guards/authGuard.guard"
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard],
+};
 
 @Component({
   selector: 'app-edit-profile-page',

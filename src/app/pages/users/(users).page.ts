@@ -4,6 +4,13 @@ import {AuthDb} from "../../services/auth-db";
 import {UserDb} from "../../services/user-db";
 import {UserService} from "../../services/user-service";
 import {User} from "../../models/User";
+import { RouteMeta } from '@analogjs/router';
+import {authGuard} from "../../guards/authGuard.guard"
+import {adminGuard} from "../../guards/adminGuard.guard"
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard, adminGuard],
+};
 
 @Component({
   selector: "app-users-list-page",

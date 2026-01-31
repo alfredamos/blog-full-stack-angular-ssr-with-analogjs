@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import {AllPosts} from "../components/posts/all-posts/all-posts";
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+    AllPosts
+  ],
   template: `
-    <p>Home Page</p>
+    <app-all-posts/>
   `,
 })
 export default class Home {}

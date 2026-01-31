@@ -1,13 +1,20 @@
 import {Component} from "@angular/core";
-import {DetailUser} from "../../../components/users/detail-user/detail-user";
+import {AuthorDetail} from "../../../components/author-detail/author-detail";
+import { RouteMeta } from '@analogjs/router';
+import {authGuard} from "../../guards/authGuard.guard"
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard],
+};
+
 
 @Component({
   selector: "app-detail-author-page",
   standalone: true,
   imports: [
-    DetailUser
+    AuthorDetail
   ],
   template: `
-    <app-user-detail/>`
+    <app-author-detail/>`
 })
-export default class DeleteAuthorPage {}
+export default class DetailAuthorPage {}
