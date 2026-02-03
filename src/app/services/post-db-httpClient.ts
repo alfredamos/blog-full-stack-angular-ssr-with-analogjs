@@ -2,27 +2,31 @@ import {inject, Injectable, signal} from '@angular/core';
 import {PostDto} from "../models/post-dto";
 import {PostService} from "./post-service";
 import { ApiHttpClientService } from './api-http-client-service';
+import {Post} from "../models/list-post";
+import {CreatePost} from "../models/create-post";
+import {PostDetail} from "../models/post-detail";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostHttpClientDb {
-  public data = signal<PostDto[]>([]);
+  public data = signal<Post[]>([]);
   private isLoading = signal(false);
   private error = signal<string | null>(null);
 
   postService = inject(PostService);
-  apiHttpClientService = inject(ApiHttpClientService) as ApiHttpClientService<PostDto | null>;
+  apiHttpClientService = inject(ApiHttpClientService) as ApiHttpClientService<PostDto| CreatePost | null>;
 
   async getPosts() {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.get<PostDto[]>("/posts");
-      console.log("In post-db, posts", response())
-      this.updatePosts(response() as PostDto[]);
-      return response() as PostDto[];
+      const response = await this.apiHttpClientService.get<Post[]>("/posts");
+      console.log("In post-db-http-client, posts", response)
+      this.updatePosts(response);
+      return response;
     } catch (err: any) {
+      console.log("In post-db-get-all-posts, errorMessage", err.message)
       this.error.set(err.message);
       throw err;
     } finally {
@@ -35,8 +39,8 @@ export class PostHttpClientDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.get<PostDto>(`/posts/${id}`);
-      return response() as PostDto
+      const response = await this.apiHttpClientService.get<PostDetail>(`/posts/${id}`);
+      return response;
     } catch (err: any) {
       this.error.set(err.message);
       throw err;
@@ -49,8 +53,8 @@ export class PostHttpClientDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.delete<PostDto>(`/posts/${id}`);
-      const newPosts = this.postService.posts()?.filter(post => post.id !== response()?.id);
+      const response = await this.apiHttpClientService.delete<Post>(`/posts/${id}`);
+      const newPosts = this.postService.posts()?.filter(post => post.id !== response.id);
       this.updatePosts(newPosts);
     } catch (err: any) {
       this.error.set(err.message);
@@ -63,9 +67,9 @@ export class PostHttpClientDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.patch<PostDto>(`/posts/${id}`, post);
-      const newPosts = this.postService.posts()?.map(post => post.id === response()?.id ? response() : post);
-      this.updatePosts(newPosts as PostDto[]);
+      const response = await this.apiHttpClientService.patch<Post>(`/posts/${id}`, post);
+      const newPosts = this.postService.posts()?.map(post => post.id === response.id ? response : post);
+      this.updatePosts(newPosts);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -73,19 +77,19 @@ export class PostHttpClientDb {
     }
   }
 
-  private updatePosts(newPosts: PostDto[]) {
+  private updatePosts(newPosts: Post[]) {
     this.data.set(newPosts);
     this.postService.updatePosts(newPosts);
     this.postService.setLocalStorage(newPosts);
   }
 
-  async createPost(post: PostDto) {
+  async createPost(post: CreatePost) {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.post<PostDto>(`/posts`, post);
-      const newPosts = [...this.postService.posts(), response()];
-      this.updatePosts(newPosts as PostDto[]);
+      const response = await this.apiHttpClientService.post<Post>(`/posts`, post);
+      const newPosts = [...this.postService.posts(), response];
+      this.updatePosts(newPosts);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {

@@ -2,6 +2,7 @@ import {inject, Injectable, signal} from '@angular/core';
 import {Author} from "../models/Author";
 import {AuthorService} from "./author-service";
 import { ApiHttpClientService } from './api-http-client-service';
+import {AuthorWithPosts} from "../models/list-author";
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +19,10 @@ export class AuthorHttpClientDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.get<Author[]>("/authors");
-      this.updateAuthors(response() as Author []);
-      return response() as Author[];
+      const response = await this.apiHttpClientService.get<AuthorWithPosts[]>("/authors");
+      console.log("In get-authors, author-http-client, authors : ", response);
+      this.updateAuthors(response);
+      return response
     } catch (err: any) {
       this.error.set(err.message);
       throw err;
@@ -36,7 +38,21 @@ export class AuthorHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<Author>(`/authors/${id}`);
-      return response() as Author
+      return response
+    } catch (err: any) {
+      this.error.set(err.message);
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async getPostsWithAuthorById(id: string) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.get<AuthorWithPosts>(`/authors/${id}`);
+      return response
     } catch (err: any) {
       this.error.set(err.message);
       throw err;
@@ -51,7 +67,7 @@ export class AuthorHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.delete<Author>(`/authors/${id}`);
-      const newAuthors = this.authorService.authors()?.filter(author => author.id !== response()?.id);
+      const newAuthors = this.authorService.authors()?.filter(author => author.id !== response.id);
       this.updateAuthors(newAuthors);
     } catch (err: any) {
       this.error.set(err.message);
@@ -61,7 +77,7 @@ export class AuthorHttpClientDb {
   }
 
 
-  private updateAuthors(newAuthors: Author[]) {
+  private updateAuthors(newAuthors: AuthorWithPosts[]) {
     this.data.set(newAuthors);
     this.authorService.updateAuthors(newAuthors);
     this.authorService.setLocalStorage(newAuthors);

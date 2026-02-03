@@ -1,8 +1,8 @@
 import {Component, inject} from "@angular/core";
-import {AuthDb} from "../../services/auth-db";
 import {Router} from "@angular/router";
 import {SignupUserModel} from "../../models/auth/SignupUserModel";
 import {SignupForm} from "../../components/auth/signup-form/signup-form";
+import { AuthHttpClientDb } from "../../services/auth-db-httpClient";
 
 @Component({
   selector: "app-signup-page",
@@ -15,7 +15,7 @@ import {SignupForm} from "../../components/auth/signup-form/signup-form";
                      (onBackToList)="backToList()"/>`
 })
 export default class SignupPage {
-  authDb = inject(AuthDb)
+  authDb = inject(AuthHttpClientDb)
   router = inject(Router)
 
   async onSignupForm(signupUserModel: SignupUserModel) {

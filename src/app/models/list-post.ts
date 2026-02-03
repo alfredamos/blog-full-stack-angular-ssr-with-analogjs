@@ -5,5 +5,6 @@ export class Post {
   content: string = '';
   title: string = '';
   dateAndTime: string | Date = new Date();
+  imageUrl?: string = '';
   author: Author = new Author();
 }

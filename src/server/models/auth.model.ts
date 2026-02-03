@@ -119,7 +119,14 @@ class AuthModel {
     }
 
     //----> Get the current user.
-    return await this.findUserByEmail(session.email);
+    const user = await prisma.user.findUnique({where: {email: session.email}, include: {author: true}});
+
+    //----> Check for null user.
+    if (!user) {
+      throw catchError(StatusCodes.UNAUTHORIZED, "Invalid credentials!");
+    }
+
+    return user;
   }
 
   async loginUser(loginUser: LoginUser, event: H3Event) {

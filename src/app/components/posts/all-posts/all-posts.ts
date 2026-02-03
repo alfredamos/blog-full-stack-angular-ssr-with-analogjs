@@ -1,10 +1,10 @@
-import {Component, inject, OnChanges, OnInit, signal, SimpleChanges} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {Post} from "../../../models/list-post";
-import {PostDb} from "../../../services/post-db";
-import {PostService} from "../../../services/post-service";
-import {AuthorDb} from "../../../services/author-db";
 import {AuthorService} from "../../../services/author-service";
 import {PostList} from "../post-list/post-list";
+import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
+import {Author, getAuthor as getOneAuthor} from "../../../models/Author";
+import {AuthorWithPosts} from "../../../models/list-author";
 
 @Component({
   selector: 'app-all-posts',
@@ -15,41 +15,32 @@ import {PostList} from "../post-list/post-list";
   styleUrl: './all-posts.css',
 })
 export class AllPosts implements OnInit{
+  authorsWithPosts = signal<Post[]>([]);
 
-  posts = signal<Post[]>([]);
-
-  authorDb = inject(AuthorDb);
+  authorDb = inject(AuthorHttpClientDb);
   authorService = inject(AuthorService);
 
-  postDb = inject(PostDb);
-  postService = inject(PostService);
-
   async ngOnInit() {
-    const posts = await this.loadPosts();
-    const allPost = posts.map(async (post) => {
-      const author = await this.getAuthor(post.authorId);
-      const postWithAuthor: Post = {...post, author};
-      return postWithAuthor;
-
+    const authorsWithPost = await this.loadAuthors();
+    const allPostsWithAuthors = authorsWithPost.map(author => {
+      const posts = author.posts;
+      const oneAuthor = this.getAuthor(author)
+      const postsWithAuthor = posts.map(post => ({...post, author:oneAuthor}));
+      return postsWithAuthor;
     })
+    const flatMapAuthorsWithPosts = allPostsWithAuthors.flatMap(postsWithAuthors => postsWithAuthors.map(postsWithAuthor => ({...postsWithAuthor})));
 
-    this.posts.set(await Promise.all(allPost));
+    this.authorsWithPosts.set(flatMapAuthorsWithPosts);
   }
 
+  getAuthor = (author: AuthorWithPosts) => getOneAuthor(author);
 
 
-  async loadPosts() {
-    const postsFromDb = await this.postDb.getPosts();
-    const postsFromStore = this.postService.posts();
+  async loadAuthors() {
+    const authorsFromDb = await this.authorDb.getAuthors();
+    const authorsFromStore = this.authorService.authors();
 
-    return postsFromStore ?? postsFromDb;
-  }
-
-  async getAuthor(id: string) {
-    const authorFromStore = this.authorService.findAuthorById(id);
-    const authorFromDb = await this.authorDb.getAuthorById(id);
-
-    return authorFromStore ?? authorFromDb;
+    return authorsFromStore ?? authorsFromDb;
   }
 
 

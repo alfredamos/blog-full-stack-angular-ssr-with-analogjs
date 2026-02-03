@@ -1,11 +1,12 @@
 import {Component, inject, OnChanges, OnInit, signal, SimpleChanges} from "@angular/core";
 import {User} from "../../models/User";
-import {AuthDb} from "../../services/auth-db";
 import {AuthService} from "../../services/auth-service";
 import {Router} from "@angular/router";
 import {EditProfileForm} from "../../components/auth/edit-profile-form/edit-profile-form";
 import {EditUserProfileModel} from "../../models/auth/EditUserProfileModel";
 import {authGuard} from "../../guards/authGuard.guard"
+import { RouteMeta } from "@analogjs/router";
+import { AuthHttpClientDb } from "../../services/auth-db-httpClient";
 
 export const routeMeta: RouteMeta = {
   canActivate: [authGuard],
@@ -24,7 +25,7 @@ export const routeMeta: RouteMeta = {
 export default class EditProfilePage implements OnInit, OnChanges{
   user = signal<User>(new User());
 
-  authDb = inject(AuthDb);
+  authDb = inject(AuthHttpClientDb);
   authService = inject(AuthService);
 
   router = inject(Router);
@@ -37,7 +38,7 @@ export default class EditProfilePage implements OnInit, OnChanges{
 
   async ngOnChanges(_changes: SimpleChanges) {
     const user = await this.loadUser();
-    console.log("In ng-on-changes, user", user);
+
     this.user.set(user);
   }
 

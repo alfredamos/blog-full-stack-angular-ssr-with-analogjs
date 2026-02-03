@@ -2,17 +2,18 @@ import {computed, inject, Injectable, signal} from '@angular/core';
 import {BrowserStorageService} from './browser-storage-service';
 import {LocalStorageKey} from '../models/LocalStorageKey';
 import {Author} from "../models/Author";
+import {AuthorWithPosts} from "../models/list-author";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthorService {
-  private authorsState = signal<Author[]>([]);
+  private authorsState = signal<AuthorWithPosts[]>([]);
   authors = computed(() => (this.authorsState.asReadonly())() || this.getLocalStorage());
 
   storageService = inject(BrowserStorageService);
 
-  updateAuthors(authors: Author[]) {
+  updateAuthors(authors: AuthorWithPosts[]) {
     this.authorsState.set(authors);
   }
 

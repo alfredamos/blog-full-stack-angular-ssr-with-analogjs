@@ -1,11 +1,11 @@
 import {Component, inject, OnInit, signal} from "@angular/core";
 import {AuthorsTable} from "../../components/authors-table/authors-table";
 import {Author} from "../../models/Author";
-import {AuthorDb} from "../../services/author-db";
 import {AuthorService} from "../../services/author-service";
 import { RouteMeta } from '@analogjs/router';
 import {authGuard} from "../../guards/authGuard.guard"
 import {adminGuard} from "../../guards/adminGuard.guard"
+import { AuthorHttpClientDb } from "../../services/author-db-httpClient";
 
 export const routeMeta: RouteMeta = {
   canActivate: [authGuard, adminGuard],
@@ -24,7 +24,7 @@ export const routeMeta: RouteMeta = {
 })
 export default class AuthorsPage implements OnInit{
   authors = signal<Author[]>([]);
-  authorDb = inject(AuthorDb);
+  authorDb = inject(AuthorHttpClientDb);
   authorService = inject(AuthorService);
 
   async ngOnInit() {

@@ -19,8 +19,8 @@ export class UserHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<User[]>("/users");
-      console.log(response() as User[])
-      this.updateUsers(response() as User[]);
+      console.log(response)
+      this.updateUsers(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -33,7 +33,7 @@ export class UserHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.delete<User>(`/users/${id}`);
-      const newUsers = this.userService.users()?.filter(user => user.id !== response()?.id);
+      const newUsers = this.userService.users()?.filter(user => user.id !== response.id);
       this.updateUsers(newUsers);
     } catch (err: any) {
       this.error.set(err.message);
@@ -47,7 +47,7 @@ export class UserHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<User>(`/users/${id}`);
-      return response() as User;
+      return response;
     } catch (err: any) {
       this.error.set(err.message);
       throw err;
@@ -61,7 +61,7 @@ export class UserHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<User>(`/users/get-user-by-email/${email}`);
-      return response();
+      return response;
     } catch (err: any) {
       this.error.set(err.message);
       throw err;

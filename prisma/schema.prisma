@@ -47,7 +47,7 @@ model Post {
   content     String   @db.Text
   dateAndTime DateTime @default(now())
 
-  Author   Author? @relation(fields: [authorId], references: [id])
+  author   Author? @relation(fields: [authorId], references: [id])
   authorId String?
 }
 

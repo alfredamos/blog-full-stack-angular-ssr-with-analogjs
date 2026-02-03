@@ -67,7 +67,21 @@ class AuthorModel{
 
   async getAuthorById(id: string){
     //----> Check for existing author.
-    const author = await prisma.author.findFirst({where:{id}});
+    const author = await prisma.author.findUnique({where:{id}});
+
+    //----> Check for null author.
+    if (!author){
+      throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
+    }
+
+    //----> Send back response.
+    return author;
+  }
+
+
+  async getPostsWithAuthorById(id: string){
+    //----> Check for existing author.
+    const author = await prisma.author.findUnique({where:{id}, include: {posts: true}});
 
     //----> Check for null author.
     if (!author){
@@ -93,7 +107,7 @@ class AuthorModel{
 
   async getAllAuthors(){
     //----> Fetch all authors.
-    return prisma.author.findMany();
+    return prisma.author.findMany({include: {posts: true}});
   }
 }
 

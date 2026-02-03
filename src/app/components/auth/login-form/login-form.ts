@@ -15,8 +15,6 @@ export class LoginForm {
     password: '',
   });
 
-
-
   loginUserForm = form(this.loginUserModel, (schemaPath)=> {
     required(schemaPath.email, {message: 'Email is required'});
     email(schemaPath.email, {message: 'Enter a valid email address'});

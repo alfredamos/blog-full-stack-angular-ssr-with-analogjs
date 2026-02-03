@@ -8,8 +8,8 @@ import {stringToDate} from "../utils/stringToDate";
 @Component({
   selector: 'app-authors-table',
   imports: [
-    NgOptimizedImage,
-    RouterLink
+    RouterLink,
+    NgOptimizedImage
   ],
   templateUrl: './authors-table.html',
   styleUrl: './authors-table.css',

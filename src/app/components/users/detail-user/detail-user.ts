@@ -4,6 +4,7 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {UserDb} from "../../../services/user-db";
 import {UserService} from "../../../services/user-service";
 import {ModalDialog} from "../../utils/modal-dialog/modal-dialog";
+import { UserHttpClientDb } from '../../../services/user-db-httpClient';
 
 @Component({
   selector: 'app-user-detail',
@@ -21,7 +22,7 @@ export class DetailUser implements OnInit{
 
   route = inject(ActivatedRoute);
   router = inject(Router)
-  userDb =inject(UserDb)
+  userDb =inject(UserHttpClientDb)
   userService = inject(UserService);
 
   async ngOnInit() {

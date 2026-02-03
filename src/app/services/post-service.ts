@@ -2,17 +2,18 @@ import {computed, inject, Injectable, signal} from '@angular/core';
 import {BrowserStorageService} from './browser-storage-service';
 import {LocalStorageKey} from '../models/LocalStorageKey';
 import {PostDto} from "../models/post-dto";
+import {Post} from "../models/list-post";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private postsState = signal<PostDto[]>([]);
+  private postsState = signal<Post[]>([]);
   posts = computed(() => (this.postsState.asReadonly())() ?? this.getLocalStorage());
 
   storageService = inject(BrowserStorageService);
 
-  updatePosts(posts: PostDto[]) {
+  updatePosts(posts: Post[]) {
     this.postsState.set(posts);
   }
 
@@ -25,7 +26,7 @@ export class PostService {
     return (this.postsState()?.find(post => post.id === id));
   }
 
-  setLocalStorage(posts: PostDto[]) {
+  setLocalStorage(posts: Post[]) {
     this.storageService.set(LocalStorageKey.postKey, JSON.stringify(posts));
   }
 

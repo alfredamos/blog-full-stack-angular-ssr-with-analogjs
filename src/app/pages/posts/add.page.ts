@@ -1,8 +1,32 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
+import {PostAdd} from "../../components/posts/post-add/post-add";
+import {PostHttpClientDb} from "../../services/post-db-httpClient";
+import {Router} from "@angular/router";
+import {CreatePost} from "../../models/create-post";
 
 @Component({
   selector: "app-add-post-page",
   standalone: true,
-  template: `<p>Add Post</p>`
+  imports: [
+    PostAdd
+  ],
+  template: `
+    <app-post-add
+      (onBackToPosts)="backToPosts()"
+      (onPostCreated)="createdPost($event)"
+    />`
 })
-export default class AddPostPage {}
+export default class AddPostPage {
+  postDb = inject(PostHttpClientDb);
+  router = inject(Router);
+
+  backToPosts() {
+    this.router.navigate(['/posts']).catch(console.error);
+  }
+
+  async createdPost(post: CreatePost) {
+    console.log("In add-post-page, post", post);
+    await this.postDb.createPost(post);
+    this.router.navigate(['/posts']).catch(console.error);
+  }
+}

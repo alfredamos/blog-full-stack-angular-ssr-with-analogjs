@@ -1,15 +1,9 @@
 import {Component} from "@angular/core";
-import {LoginForm} from "../../components/auth/login-form/login-form";
 import {Unauthorized} from "../../components/auth/unauthorized/unauthorized";
 
 @Component({
   selector: 'app-route-unauthorized-page',
-  standalone: true,
-  imports: [
-    Unauthorized
-  ],
-  template: `
-    <app-unauthorized-page/>
-    `
+  imports: [Unauthorized],
+  template: ` <app-unauthorized /> `,
 })
-export default class UnauthorizedPage{}
+export default class UnauthorizedPage {}

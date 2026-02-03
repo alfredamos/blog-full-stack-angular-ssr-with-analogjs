@@ -3,6 +3,7 @@ import {LoginUserModel} from "../../models/auth/LoginUserModel";
 import {AuthDb} from "../../services/auth-db";
 import {Router} from "@angular/router";
 import {LoginForm} from "../../components/auth/login-form/login-form";
+import { AuthHttpClientDb } from "../../services/auth-db-httpClient";
 
 @Component({
   selector: 'app-login-page',
@@ -15,7 +16,7 @@ import {LoginForm} from "../../components/auth/login-form/login-form";
                     (onLogin)="submitLoginForm($event)"/>`
 })
 export default class LoginPage{
-  authDb = inject(AuthDb)
+  authDb = inject(AuthHttpClientDb)
   router = inject(Router)
 
   async backToList() {

@@ -190,7 +190,7 @@ export type PostWhereInput = {
   content?: Prisma.StringFilter<"Post"> | string
   dateAndTime?: Prisma.DateTimeFilter<"Post"> | Date | string
   authorId?: Prisma.StringNullableFilter<"Post"> | string | null
-  Author?: Prisma.XOR<Prisma.AuthorNullableScalarRelationFilter, Prisma.AuthorWhereInput> | null
+  author?: Prisma.XOR<Prisma.AuthorNullableScalarRelationFilter, Prisma.AuthorWhereInput> | null
 }
 
 export type PostOrderByWithRelationInput = {
@@ -200,7 +200,7 @@ export type PostOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   dateAndTime?: Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
-  Author?: Prisma.AuthorOrderByWithRelationInput
+  author?: Prisma.AuthorOrderByWithRelationInput
   _relevance?: Prisma.PostOrderByRelevanceInput
 }
 
@@ -214,7 +214,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Post"> | string
   dateAndTime?: Prisma.DateTimeFilter<"Post"> | Date | string
   authorId?: Prisma.StringNullableFilter<"Post"> | string | null
-  Author?: Prisma.XOR<Prisma.AuthorNullableScalarRelationFilter, Prisma.AuthorWhereInput> | null
+  author?: Prisma.XOR<Prisma.AuthorNullableScalarRelationFilter, Prisma.AuthorWhereInput> | null
 }, "id">
 
 export type PostOrderByWithAggregationInput = {
@@ -247,7 +247,7 @@ export type PostCreateInput = {
   imageUrl: string
   content: string
   dateAndTime?: Date | string
-  Author?: Prisma.AuthorCreateNestedOneWithoutPostsInput
+  author?: Prisma.AuthorCreateNestedOneWithoutPostsInput
 }
 
 export type PostUncheckedCreateInput = {
@@ -265,7 +265,7 @@ export type PostUpdateInput = {
   imageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   dateAndTime?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  Author?: Prisma.AuthorUpdateOneWithoutPostsNestedInput
+  author?: Prisma.AuthorUpdateOneWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateInput = {
@@ -487,7 +487,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   content?: boolean
   dateAndTime?: boolean
   authorId?: boolean
-  Author?: boolean | Prisma.Post$AuthorArgs<ExtArgs>
+  author?: boolean | Prisma.Post$authorArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 
@@ -503,13 +503,13 @@ export type PostSelectScalar = {
 
 export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "imageUrl" | "content" | "dateAndTime" | "authorId", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  Author?: boolean | Prisma.Post$AuthorArgs<ExtArgs>
+  author?: boolean | Prisma.Post$authorArgs<ExtArgs>
 }
 
 export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Post"
   objects: {
-    Author: Prisma.$AuthorPayload<ExtArgs> | null
+    author: Prisma.$AuthorPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -858,7 +858,7 @@ readonly fields: PostFieldRefs;
  */
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  Author<T extends Prisma.Post$AuthorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$AuthorArgs<ExtArgs>>): Prisma.Prisma__AuthorClient<runtime.Types.Result.GetResult<Prisma.$AuthorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  author<T extends Prisma.Post$authorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$authorArgs<ExtArgs>>): Prisma.Prisma__AuthorClient<runtime.Types.Result.GetResult<Prisma.$AuthorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1237,9 +1237,9 @@ export type PostDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * Post.Author
+ * Post.author
  */
-export type Post$AuthorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Post$authorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Author
    */

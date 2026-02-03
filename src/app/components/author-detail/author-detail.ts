@@ -3,15 +3,15 @@ import {Author} from "../../models/Author";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {formattedDate} from "../utils/formattedDate";
 import {stringToDate} from "../utils/stringToDate";
-import {AuthorDb} from "../../services/author-db";
 import {AuthorService} from "../../services/author-service";
 import {ModalDialog} from "../utils/modal-dialog/modal-dialog";
+import { AuthorHttpClientDb } from '../../services/author-db-httpClient';
 
 @Component({
   selector: 'app-author-detail',
   imports: [
-    RouterLink,
-    ModalDialog
+    ModalDialog,
+    RouterLink
   ],
   templateUrl: './author-detail.html',
   styleUrl: './author-detail.css',
@@ -22,7 +22,7 @@ export class AuthorDetail implements OnInit{
   isModalOpen = false;
   author = signal<Author>(new Author())
 
-  authorDb = inject(AuthorDb);
+  authorDb = inject(AuthorHttpClientDb);
   authorService = inject(AuthorService);
   router = inject(Router);
   route = inject(ActivatedRoute);

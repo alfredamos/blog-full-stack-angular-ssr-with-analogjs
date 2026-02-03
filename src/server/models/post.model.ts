@@ -103,7 +103,7 @@ class PostModel{
 
   private async getOnePostById(id: string){
     //----> Get the post.
-    const post = await prisma.post.findUnique({where: {id}});
+    const post = await prisma.post.findUnique({where: {id}, include: {author: true}});
 
     //----> Check for null post.
     if (!post){

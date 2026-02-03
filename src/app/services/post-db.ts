@@ -2,12 +2,13 @@ import {inject, Injectable, signal} from '@angular/core';
 import {ApiClientService} from './api-client-service';
 import {PostDto} from "../models/post-dto";
 import {PostService} from "./post-service";
+import {Post} from "../models/list-post";
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostDb {
-  public data = signal<PostDto[]>([]);
+  public data = signal<Post[]>([]);
   private isLoading = signal(false);
   private error = signal<string | null>(null);
 
@@ -18,7 +19,7 @@ export class PostDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiClientService.get<PostDto[]>("/posts");
+      const response = await this.apiClientService.get<Post[]>("/posts");
       console.log("In post-db, posts", response.data)
       this.updatePosts(response.data);
       return response.data;
@@ -49,7 +50,7 @@ export class PostDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiClientService.delete<PostDto>(`/posts/${id}`);
+      const response = await this.apiClientService.delete<Post>(`/posts/${id}`);
       const newPosts = this.postService.posts()?.filter(post => post.id !== response.data.id);
       this.updatePosts(newPosts);
     } catch (err: any) {
@@ -63,7 +64,7 @@ export class PostDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiClientService.patch<PostDto>(`/posts/${id}`, post);
+      const response = await this.apiClientService.patch<Post>(`/posts/${id}`, post);
       const newPosts = this.postService.posts()?.map(post => post.id === response.data.id ? response.data : post);
       this.updatePosts(newPosts);
     } catch (err: any) {
@@ -73,7 +74,7 @@ export class PostDb {
     }
   }
 
-  private updatePosts(newPosts: PostDto[]) {
+  private updatePosts(newPosts: Post[]) {
     this.data.set(newPosts);
     this.postService.updatePosts(newPosts);
     this.postService.setLocalStorage(newPosts);
@@ -83,7 +84,7 @@ export class PostDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiClientService.post<PostDto>(`/posts`, post);
+      const response = await this.apiClientService.post<Post>(`/posts`, post);
       const newPosts = [...this.postService.posts(), response.data];
       this.updatePosts(newPosts);
     } catch (err: any) {

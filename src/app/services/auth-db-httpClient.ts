@@ -41,7 +41,7 @@ export class AuthHttpClientDb {
         '/auth/changeUserPassword',
         changeUserPasswordModel,
       );
-      this.data.set(response() as ResponseMessage);
+      this.data.set(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -57,7 +57,7 @@ export class AuthHttpClientDb {
         '/auth/change-role',
         changeRoleOfUser,
       );
-      this.data.set(response() as ResponseMessage);
+      this.data.set(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -73,7 +73,7 @@ export class AuthHttpClientDb {
         '/auth/edit-profile',
         editUserProfileModel,
       );
-      this.data.set(response() as ResponseMessage);
+      this.data.set(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -87,9 +87,9 @@ export class AuthHttpClientDb {
     try {
       const response = await this.apiHttpClientService.post<UserSession>(
         '/auth/login',
-        loginUser,
+        loginUser
       );
-      this.updateSession(response() as UserSession);
+      this.updateSession(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -111,7 +111,7 @@ export class AuthHttpClientDb {
         '/auth/logout',
         null,
       );
-      this.data.set(response() as UserSession);
+      this.data.set(response);
       this.removeStoresAndLocalStorages();
     } catch (err: any) {
       this.error.set(err.message);
@@ -125,8 +125,8 @@ export class AuthHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<User>('/auth/me');
-      this.updateCurrentUser(response() as User);
-      return response() as User;
+      this.updateCurrentUser(response);
+      return response;
     } catch (err: any) {
       this.error.set(err.message);
       throw err;
@@ -145,10 +145,10 @@ export class AuthHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.post<ResponseMessage>(
-        'auth/signup',
+        '/auth/signup',
         signupUser,
       );
-      this.data.set(response() as ResponseMessage);
+      this.data.set(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {
@@ -164,7 +164,7 @@ export class AuthHttpClientDb {
         '/auth/refresh',
         null,
       );
-      this.updateSession(response() as UserSession);
+      this.updateSession(response);
     } catch (err: any) {
       this.error.set(err.message);
     } finally {

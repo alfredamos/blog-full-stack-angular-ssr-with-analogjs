@@ -2,7 +2,6 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
@@ -29,6 +28,9 @@
     "strictTemplates": true
   },
   "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
     { "path": "tsconfig.spec.json" }
   ]
 }

@@ -15,6 +15,6 @@ import {DatePipe} from "@angular/common";
   styleUrl: './post-list.css',
 })
 export class PostList {
-  posts = input.required<Post[]>();
+  authorsWithPosts = input.required<Post[]>();
 
 }

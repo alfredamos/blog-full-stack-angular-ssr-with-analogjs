@@ -1,29 +1,38 @@
 import {Injectable, inject} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from './auth-service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiHttpClientService<T> {
   private httpClient = inject(HttpClient)
+  private baseUrl = "http://localhost:5173/api"
 
-  public get<U>(url: string) {
-    return toSignal(this.httpClient.get<U>(url));
+  public async get<U>(url: string) {
+    const response$ = this.httpClient.get<U>(`${this.baseUrl}${url}`);
+    return firstValueFrom(response$);
+
+
+
   }
 
-  public post<U>(url: string, data: T) {
-    return toSignal(this.httpClient.post<U>(url, data));
+  public async post<U>(url: string, data: T) {
+    const response$ = this.httpClient.post<U>(`${this.baseUrl}${url}`, data);
+    return firstValueFrom(response$);
   }
 
-  public patch<U>(url: string, data: T) {
-    return toSignal(this.httpClient.patch<U>(url, data));
+  public async patch<U>(url: string, data: T) {
+    const response$ = this.httpClient.patch<U>(`${this.baseUrl}${url}`, data);
+    return firstValueFrom(response$);
   }
 
-  public delete<U>(url: string) {
-    return toSignal(this.httpClient.delete<U>(url));
+
+  public async delete<U>(url: string) {
+    const response$ = this.httpClient.delete<U>(`${this.baseUrl}${url}`);
+    return firstValueFrom(response$);
   }
 
 }

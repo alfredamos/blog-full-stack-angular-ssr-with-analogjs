@@ -64,15 +64,15 @@ export class EditProfileForm implements OnInit, OnChanges{
 
   fromUserToEditProfileModel(user : User): EditUserProfileModel{
     return {
-      dateOfBirth: formattedDate(stringToDate(user.author.dateOfBirth)),
-      email: user.email,
-      gender: user.author.gender,
-      image: user.image,
+      dateOfBirth: formattedDate(stringToDate(user?.author?.dateOfBirth)),
+      email: user?.email,
+      gender: user?.author?.gender,
+      image: user?.image,
       password: "",
-      phone: user.author.phone,
-      role: user.role,
-      name: user.name,
-      address: user.author.address
+      phone: user?.author?.phone,
+      role: user?.role,
+      name: user?.name,
+      address: user?.author?.address
     }
   }
 

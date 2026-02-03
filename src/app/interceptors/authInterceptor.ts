@@ -1,20 +1,14 @@
 import {
   HttpInterceptorFn,
-  HttpRequest,
-  HttpHandlerFn,
-  HttpEvent,
+  HttpRequest, HttpHandlerFn
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BrowserStorageService } from 'src/app/services/browser-storage-service';
+import { BrowserStorageService } from '../services/browser-storage-service';
 import { inject } from '@angular/core';
-import { LocalStorageKey } from 'src/app/models/LocalStorageKey';
+import { LocalStorageKey } from '../models/LocalStorageKey';
 
-export const authInterceptor: HttpInterceptorFn = (
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn,
-): Observable<HttpEvent<unknown>> => {
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
   //----> Get the auth from local storage.
-  const localStorageService = inject(BrowserStorageService)
+  const localStorageService = inject(BrowserStorageService);
 
   //----> Clone the request to add credentials (cookies/sessions) and headers
   const clonedRequest = req.clone({
