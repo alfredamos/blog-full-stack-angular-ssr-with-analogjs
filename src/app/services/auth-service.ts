@@ -34,18 +34,15 @@ export class AuthService {
   }
 
   setLocalStorage(session: UserSession){
-    //localStorage.setItem(LocalStorageKey.authKey, JSON.stringify(session));
     this.storageService.set(LocalStorageKey.authKey, JSON.stringify(session));
   }
 
   getLocalStorage(){
     return JSON.parse(this.storageService.get(LocalStorageKey.authKey) as string ) as UserSession;
-    //return JSON.parse(localStorage.getItem(LocalStorageKey.authKey) as string) as UserSession;
   }
 
   removeStorage(){
     this.storageService.remove(LocalStorageKey.authKey);
-    //localStorage.removeItem(LocalStorageKey.authKey);
   }
 
   updateCurrentUser(user: User){
@@ -58,17 +55,14 @@ export class AuthService {
 
   setCurrentUserLocalStorage(user: User){
     this.storageService.set(LocalStorageKey.currentUserKey, JSON.stringify(user));
-    //localStorage.setItem(LocalStorageKey.currentUserKey, JSON.stringify(user));
   }
 
   getCurrentUserLocalStorage(){
     return JSON.parse(this.storageService.get(LocalStorageKey.currentUserKey) as string) as User;
-    //return JSON.parse(localStorage.getItem(LocalStorageKey.currentUserKey) as string) as User;
   }
 
   removeCurrentUserLocalStorage(){
     this.removeCurrentUser()
-    //localStorage.removeItem(LocalStorageKey.currentUserKey)
     this.storageService.remove(LocalStorageKey.currentUserKey);
   }
 }

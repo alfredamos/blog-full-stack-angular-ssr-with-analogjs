@@ -9,9 +9,10 @@ import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
 import {PostHttpClientDb} from "../../../services/post-db-httpClient";
 import {PostDto} from "../../../models/post-dto";
 import {PostDetail} from "../../../models/post-detail";
+import {isOwnerCheckOrAdminGuard} from "../../../guards/isOwnerCheckOrAdminGuard.guard";
 
 export const routeMeta: RouteMeta = {
-  canActivate: [authGuard],
+  canActivate: [authGuard, isOwnerCheckOrAdminGuard],
 };
 
 @Component({

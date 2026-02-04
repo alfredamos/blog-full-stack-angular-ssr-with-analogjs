@@ -1,4 +1,4 @@
-import {Component, output, signal} from '@angular/core';
+import {Component, output, signal, OnInit, OnChanges, SimpleChange} from '@angular/core';
 import {email, FormField, form, required} from '@angular/forms/signals';
 import {LoginUserModel} from "../../../models/auth/LoginUserModel";
 
@@ -9,7 +9,7 @@ import {LoginUserModel} from "../../../models/auth/LoginUserModel";
   ],
   templateUrl: './login-form.html',
 })
-export class LoginForm {
+export class LoginForm{
   loginUserModel = signal<LoginUserModel>({
     email: '',
     password: '',
@@ -25,13 +25,15 @@ export class LoginForm {
   onBack = output<void>()
 
   onSubmit(event: Event) {
+    console.log("At point 3, in login-form-component, onSubmit");
     event.preventDefault();
-
+    console.log("In login-form-component, loginUserPayload : ", this.loginUserModel())
     this.onLogin.emit(this.loginUserModel())
 
   }
 
   backToList() {
+    console.log("At point 4, in login-form-component, backToList");
     this.onBack.emit()
   }
 }

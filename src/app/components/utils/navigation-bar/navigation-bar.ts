@@ -1,10 +1,10 @@
-import {Component, inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {SettingsDropDown} from '../settings-drop-down/settings-drop-down';
 import {AdminDropDown} from '../admin-drop-down/admin-drop-down';
-import {AuthDb} from "../../../services/auth-db";
 import {AuthService} from "../../../services/auth-service";
+import {AuthHttpClientDb} from "../../../services/auth-db-httpClient";
 
 @Component({
   selector: 'app-navigation-bar',
@@ -19,7 +19,7 @@ import {AuthService} from "../../../services/auth-service";
   standalone: true
 })
 export class NavigationBar{
-  authDb = inject(AuthDb)
+  authDb = inject(AuthHttpClientDb)
   authService = inject(AuthService);
 
   isMenuOpen = false;

@@ -61,6 +61,9 @@
               <a [routerLink]="`/authors/${author.id}/detail`" class="px-2 py-1 bg-white text-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-bold rounded-md">
                 Delete
               </a>
+              <a [routerLink]="`/posts/get-author-posts-by-email/${author.email}`" class="px-2 py-1 bg-white text-gray-900 border border-gray-900 hover:bg-gray-900 hover:text-white font-bold rounded-md">
+                Blogs
+              </a>
             </td>
           </tr>
         }

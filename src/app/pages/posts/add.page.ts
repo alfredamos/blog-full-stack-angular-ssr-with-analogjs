@@ -3,6 +3,12 @@ import {PostAdd} from "../../components/posts/post-add/post-add";
 import {PostHttpClientDb} from "../../services/post-db-httpClient";
 import {Router} from "@angular/router";
 import {CreatePost} from "../../models/create-post";
+import {RouteMeta} from "@analogjs/router";
+import {authGuard} from "../../guards/authGuard.guard";
+
+export const routeMeta: RouteMeta = {
+  canActivate: [authGuard],
+};
 
 @Component({
   selector: "app-add-post-page",

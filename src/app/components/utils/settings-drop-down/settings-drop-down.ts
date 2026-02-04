@@ -1,6 +1,8 @@
-import {Component, computed, inject, input, output} from '@angular/core';
+import {Component, computed, inject, input, OnInit, output, signal} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/auth-service";
+import {PostHttpClientDb} from "../../../services/post-db-httpClient";
+import {AuthHttpClientDb} from "../../../services/auth-db-httpClient";
 
 @Component({
   selector: 'app-settings-drop-down',
@@ -10,13 +12,27 @@ import {AuthService} from "../../../services/auth-service";
   templateUrl: './settings-drop-down.html',
   styleUrl: './settings-drop-down.css',
 })
-export class SettingsDropDown {
+export class SettingsDropDown implements OnInit{
+  idOfUser = signal("")
   authService = inject(AuthService);
-  email = computed(() =>  decodeURIComponent(this.authService.email()))
+  authDb = inject(AuthHttpClientDb)
+  userId = computed(() =>  this.authService.userCurrent()?.id as string);
 
   onRefreshUserToken = output<void>();
 
+  async ngOnInit(){
+    const userId = await this.getCurrentUser();
+    this.idOfUser.set(userId);
+    console.log("In settings-drop-down, userId : ", userId)
+  }
+
   refreshUserToken() {
     this.onRefreshUserToken.emit();
+  }
+
+  async getCurrentUser(){
+    const currentUser = await this.authDb.getCurrentUser();
+
+    return this.userId() ?? currentUser?.id
   }
 }

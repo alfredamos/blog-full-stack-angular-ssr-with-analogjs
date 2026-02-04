@@ -38,7 +38,7 @@ class AuthorModel{
 
   async deleteAuthorByEmail(email: string){
     //----> Check for existing author.
-    const author = await prisma.author.findFirst({where:{email}});
+    const author = await prisma.author.findUnique({where:{email}});
 
     //----> Check for null author.
     if (!author){
@@ -52,9 +52,21 @@ class AuthorModel{
     return new ResponseMessage("Author has been deleted successfully!", "success", StatusCodes.OK);
   }
 
-  async getAuthorByUserId(userId: string){
+  async getAuthorPostsByEmail(email: string){
     //----> Check for existing author.
-    const author = await prisma.author.findFirst({where:{userId}});
+    const author = await prisma.author.findUnique({where:{email}, include: {posts: true}});
+
+    //----> Check for null author.
+    if (!author){
+      throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
+    }
+
+    //----> Send back response.
+    return author;
+  }
+  async getAuthorPostsByUserId(userId: string){
+    //----> Check for existing author.
+    const author = await prisma.author.findUnique({where:{userId}, include: {posts: true}});
 
     //----> Check for null author.
     if (!author){
@@ -78,6 +90,44 @@ class AuthorModel{
     return author;
   }
 
+  async getAuthorByUserId(userId: string){
+    //----> Check for existing author.
+    const author = await prisma.author.findUnique({where:{userId}});
+
+    //----> Check for null author.
+    if (!author){
+      throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
+    }
+
+    //----> Send back response.
+    return author;
+  }
+
+  async getAuthorWithUserByAuthorId(authorId: string){
+    //----> Check for existing author.
+    const author = await prisma.author.findUnique({where:{id: authorId}, include: {user: true}});
+
+    //----> Check for null author.
+    if (!author){
+      throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
+    }
+
+    //----> Send back response.
+    return author;
+  }
+
+  async getAuthorWithUserByEmail(email: string){
+    //----> Check for existing author.
+    const author = await prisma.author.findUnique({where:{email}, include: {user: true}});
+
+    //----> Check for null author.
+    if (!author){
+      throw catchError(StatusCodes.NOT_FOUND, "Author is not found for this user!");
+    }
+
+    //----> Send back response.
+    return author;
+  }
 
   async getPostsWithAuthorById(id: string){
     //----> Check for existing author.

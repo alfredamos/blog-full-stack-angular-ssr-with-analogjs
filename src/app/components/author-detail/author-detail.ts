@@ -51,6 +51,6 @@ export class AuthorDetail implements OnInit{
 
   async deleteAuthor(){
     await this.authorDb.deleteAuthorById(this.id as string)
-    await this.router.navigate(['/authorss']);
+    await this.router.navigate(['/authors']);
   }
 }

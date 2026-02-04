@@ -1,12 +1,12 @@
 import {Component, inject, OnInit} from "@angular/core";
 import {UserTable} from "../../components/users/user-table/user-table";
-import {AuthDb} from "../../services/auth-db";
 import {UserService} from "../../services/user-service";
 import {User} from "../../models/User";
 import { RouteMeta } from '@analogjs/router';
 import {authGuard} from "../../guards/authGuard.guard"
 import {adminGuard} from "../../guards/adminGuard.guard"
 import { UserHttpClientDb } from "../../services/user-db-httpClient";
+import {AuthHttpClientDb} from "../../services/auth-db-httpClient";
 
 export const routeMeta: RouteMeta = {
   canActivate: [authGuard, adminGuard],
@@ -25,7 +25,7 @@ export const routeMeta: RouteMeta = {
     />`
 })
 export default class UsersPage implements OnInit {
-  authDb = inject(AuthDb);
+  authDb = inject(AuthHttpClientDb);
   userDb = inject(UserHttpClientDb)
   userService = inject(UserService);
 

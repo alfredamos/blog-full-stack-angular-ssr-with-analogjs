@@ -1,5 +1,6 @@
 import {Gender} from "./Gender";
 import {PostDto} from "./post-dto";
+import {Post} from "./list-post";
 
 export class AuthorWithPosts {
   id: string = "";

@@ -22,10 +22,6 @@ export class PostService {
     this.removeStorage();
   }
 
-  findPostById(id: string) {
-    return (this.postsState()?.find(post => post.id === id));
-  }
-
   setLocalStorage(posts: Post[]) {
     this.storageService.set(LocalStorageKey.postKey, JSON.stringify(posts));
   }

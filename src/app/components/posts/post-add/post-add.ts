@@ -21,6 +21,7 @@ export class PostAdd {
   onPostCreated = output<CreatePost>();
 
   postForm = form(this.post, (schemaPath) => {
+    console.log("In post form")
     required(schemaPath.title, {message: 'Title is required'});
     required(schemaPath.imageUrl, {message: "Image Url is required"});
     required(schemaPath.content, {message: "Content is required"});

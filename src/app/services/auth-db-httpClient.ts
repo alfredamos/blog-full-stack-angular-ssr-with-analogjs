@@ -10,6 +10,8 @@ import {ChangeUserRole} from "../models/auth/ChangeUserRole";
 import {UserService} from "./user-service";
 import {SignupUserModel} from "../models/auth/SignupUserModel";
 import { ApiHttpClientService } from './api-http-client-service';
+import {AuthorService} from "./author-service";
+import {PostService} from "./post-service";
 
 
 
@@ -31,7 +33,9 @@ export class AuthHttpClientDb {
     | null
   >;
   private authService = inject(AuthService);
+  private authorService = inject(AuthorService);
   private userService = inject(UserService);
+  private postService = inject(PostService);
 
   async changeUserPassword(changeUserPasswordModel: ChangeUserPasswordModel) {
     this.isLoading.set(true);
@@ -135,11 +139,6 @@ export class AuthHttpClientDb {
     }
   }
 
-  removeStoresAndLocalStorages() {
-    this.authService.removeSession();
-    this.userService.removeUsers();
-  }
-
   async signupUser(signupUser: SignupUserModel) {
     this.isLoading.set(true);
     this.error.set(null);
@@ -170,6 +169,14 @@ export class AuthHttpClientDb {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  removeStoresAndLocalStorages() {
+    this.authService.removeSession();
+    this.authorService.removeAuthors();
+    this.postService.removePosts();
+    this.userService.removeUsers();
+
   }
 
   updateCurrentUser(user: User) {

@@ -1,6 +1,5 @@
-import {Component, inject} from "@angular/core";
+import {Component, inject, OnInit} from "@angular/core";
 import {LoginUserModel} from "../../models/auth/LoginUserModel";
-import {AuthDb} from "../../services/auth-db";
 import {Router} from "@angular/router";
 import {LoginForm} from "../../components/auth/login-form/login-form";
 import { AuthHttpClientDb } from "../../services/auth-db-httpClient";
@@ -24,6 +23,7 @@ export default class LoginPage{
   }
 
   async submitLoginForm(loginUserModel: LoginUserModel) {
+    console.log("In login-page, submitLoginForm", loginUserModel);
     await this.authDb.loginUser(loginUserModel);
     await this.router.navigate(["/"])
   }

@@ -1,7 +1,7 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {PostDto} from "../models/post-dto";
 import {PostService} from "./post-service";
-import { ApiHttpClientService } from './api-http-client-service';
+import {ApiHttpClientService} from './api-http-client-service';
 import {Post} from "../models/list-post";
 import {CreatePost} from "../models/create-post";
 import {PostDetail} from "../models/post-detail";
@@ -22,11 +22,25 @@ export class PostHttpClientDb {
     this.error.set(null);
     try {
       const response = await this.apiHttpClientService.get<Post[]>("/posts");
-      console.log("In post-db-http-client, posts", response)
       this.updatePosts(response);
       return response;
     } catch (err: any) {
-      console.log("In post-db-get-all-posts, errorMessage", err.message)
+      this.error.set(err.message);
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+
+    }
+  }
+
+  async getPostsByUserId(userId: string) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      const response = await this.apiHttpClientService.get<Post[]>("/posts");
+      this.updatePosts(response);
+      return response;
+    } catch (err: any) {
       this.error.set(err.message);
       throw err;
     } finally {
@@ -39,8 +53,7 @@ export class PostHttpClientDb {
     this.isLoading.set(true);
     this.error.set(null);
     try {
-      const response = await this.apiHttpClientService.get<PostDetail>(`/posts/${id}`);
-      return response;
+      return await this.apiHttpClientService.get<PostDetail>(`/posts/${id}`);
     } catch (err: any) {
       this.error.set(err.message);
       throw err;

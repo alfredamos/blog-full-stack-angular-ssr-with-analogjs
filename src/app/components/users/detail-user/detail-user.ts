@@ -1,7 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {User} from "../../../models/User";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {UserDb} from "../../../services/user-db";
 import {UserService} from "../../../services/user-service";
 import {ModalDialog} from "../../utils/modal-dialog/modal-dialog";
 import { UserHttpClientDb } from '../../../services/user-db-httpClient';
