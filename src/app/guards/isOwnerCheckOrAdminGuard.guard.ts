@@ -17,8 +17,11 @@ export const isOwnerCheckOrAdminGuard: CanActivateFn = (
   const isAdmin = computed(() => authService.isAdmin());
 
   //----> Get the resource ID from the route parameters
-  const resourceId = route.paramMap.get('id'); // Assumes your route parameter is named 'id'
+  const resourceId = route.paramMap.get('userId'); // Assumes your route parameter is named 'id'
 
+  console.log("In is-owner-check-or-admin-guard, userId : ", currentUserId());
+  console.log("In is-owner-check-or-admin-guard, resourceId : ", resourceId);
+  console.log("In is-owner-check-or-admin-guard, isAdmin : ", isAdmin());
   //----> Compare the IDs
   if (currentUserId() !== resourceId && !isAdmin()) {
     // Redirect to unauthorized page
