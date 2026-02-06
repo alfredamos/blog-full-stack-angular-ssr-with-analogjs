@@ -46,6 +46,19 @@ export class AuthorHttpClientDb {
     }
   }
 
+  async getAuthorWithUserById(id: string) {
+    this.isLoading.set(true);
+    this.error.set(null);
+    try {
+      return await this.apiHttpClientService.get<Author>(`/authors/author-with-user/${id}`)
+    } catch (err: any) {
+      this.error.set(err.message);
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
   async getAuthorByEmail(email: string) {
     this.isLoading.set(true);
     this.error.set(null);

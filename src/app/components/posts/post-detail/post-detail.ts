@@ -8,16 +8,17 @@ import {ModalDialog} from "../../utils/modal-dialog/modal-dialog";
   selector: 'app-post-detail',
   imports: [
     RouterLink,
-    ModalDialog
+    ModalDialog,
   ],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.css',
+  standalone: true
 })
 export class PostDetail implements OnInit{
-  id = ""
+  id = "";
+  idOfAuthor = signal<string>("");
   isModalOpen = false;
   post = signal<Post>(new Post());
-
   postDb = inject(PostHttpClientDb);
 
   router = inject(Router);
@@ -28,7 +29,9 @@ export class PostDetail implements OnInit{
 
     const post = await this.loadPost();
 
-    this.post.set(post)
+    console.log("###### In detail-post-page, post is: #######", this.idOfAuthor());
+
+    this.post.set(post);
 
   }
 

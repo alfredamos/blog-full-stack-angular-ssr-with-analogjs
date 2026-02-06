@@ -20,10 +20,9 @@ export default defineEventHandler(async (event) => {
 
   //----> Check for ownership or admin privilege.
   if (!await adminOrOwnerCheckByAuthorId(editedPost.authorId as string, event)){
-    await sendRedirect(event, '/unauthorized', StatusCodes.FORBIDDEN);
-    return;
+    return await sendRedirect(event, '/unauthorized', StatusCodes.FORBIDDEN);
   }
-
+  console.log("In the right place in post-edit route!");
   //----> Return the edited post.
   return editedPost;
 });

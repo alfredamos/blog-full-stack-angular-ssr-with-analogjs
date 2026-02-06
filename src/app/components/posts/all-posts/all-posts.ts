@@ -1,10 +1,9 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Post} from "../../../models/list-post";
-import {AuthorService} from "../../../services/author-service";
 import {PostList} from "../post-list/post-list";
 import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
-import {Author, getAuthor as getOneAuthor} from "../../../models/Author";
 import {AuthorWithPosts} from "../../../models/list-author";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service";
 
 @Component({
   selector: 'app-all-posts',
@@ -18,29 +17,33 @@ export class AllPosts implements OnInit{
   authorsWithPosts = signal<Post[]>([]);
 
   authorDb = inject(AuthorHttpClientDb);
-  authorService = inject(AuthorService);
+
+  isOwnerOrAdmin = inject(AdminOrOwnerCheckService)
 
   async ngOnInit() {
     const authorsWithPost = await this.loadAuthors();
-    const allPostsWithAuthors = authorsWithPost.map(author => {
+    const allPostsWithAuthors = authorsWithPost.map(authorWithIsAuthor => {
+      const {author, isAuthor} = authorWithIsAuthor;
       const posts = author.posts;
-      const oneAuthor = this.getAuthor(author)
-      const postsWithAuthor = posts.map(post => ({...post, author:oneAuthor}));
-      return postsWithAuthor;
-    })
+
+      return posts.map(post =>{
+        return {...post, author, isAuthor};
+      });
+
+    });
     const flatMapAuthorsWithPosts = allPostsWithAuthors.flatMap(postsWithAuthors => postsWithAuthors.map(postsWithAuthor => ({...postsWithAuthor})));
 
     this.authorsWithPosts.set(flatMapAuthorsWithPosts);
   }
 
-  getAuthor = (author: AuthorWithPosts) => getOneAuthor(author);
-
-
   async loadAuthors() {
-    const authorsFromDb = await this.authorDb.getAuthors();
-    const authorsFromStore = this.authorService.authors();
+    const authors = await this.authorDb.getAuthors();
 
-    return authorsFromStore ?? authorsFromDb;
+    return authors.map((author) => {
+      const isAuthor = this.isOwnerOrAdmin.isAuthor(author.userId);
+
+      return {author: author, isAuthor: isAuthor} as { author: AuthorWithPosts, isAuthor: boolean };
+    });
   }
 
 

@@ -3,7 +3,7 @@ import {computed, inject} from '@angular/core';
 import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router, UrlTree } from '@angular/router';
 import {AuthService} from "../services/auth-service";
 
-export const isOwnerCheckOrAdminGuard: CanActivateFn = (
+export const isOwnerCheckByUserIdOrAdminGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ): boolean | UrlTree => {

@@ -1,22 +1,24 @@
-import {H3Event} from "h3";
-import {authorModel} from "../models/author.model";
-import {authModel} from "../models/auth.model";
+import {inject} from "@angular/core";
 import {Role} from "../../app/models/Role";
+import {AuthService} from "../services/auth-service";
+import {AuthorHttpClientDb} from "../services/author-db-httpClient";
 
-export async function adminOrOwnerCheckByAuthorId(authorId: string, event: H3Event) {
+export async function adminOrOwnerCheckByAuthorId(authorId: string) {
+  const authService = inject(AuthService);
+  const authorDb = inject(AuthorHttpClientDb);
   //----> Get the user-id from user-session.
-  const session = authModel.getSession(event);
-  const userIdFromAuth = session?.id as string;
+  const currentUser = authService.userCurrent;
+  const userIdFromAuth = currentUser()?.id as string;
 
   //----> Get the user from author by authorId.
-  const author = await authorModel.getAuthorById(authorId);
+  const author = await authorDb.getAuthorById(authorId);
   const userIdFromResource = author?.userId;
 
   //----> Check if the user-id from user-session is the same as the user-id from author.
   const isSameUser = userIdFromAuth.normalize() === userIdFromResource.normalize();
 
   //----> Check for admin role.
-  const isAdmin = session?.role === Role.Admin;
+  const isAdmin = currentUser()?.role === Role.Admin;
 
   console.log("In Admin or owner-check, isAdmin : ", isAdmin);
   console.log("In Admin or owner-check, isSame : ", isSameUser);
@@ -25,6 +27,5 @@ export async function adminOrOwnerCheckByAuthorId(authorId: string, event: H3Eve
     return false;
   }
 
-  console.log("@@@@@@ is either an admin or the owner of the resource @@@@@@@@@")
   return true;
 }

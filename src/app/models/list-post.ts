@@ -7,4 +7,5 @@ export class Post {
   dateAndTime: string | Date = new Date();
   imageUrl?: string = '';
   author: Author = new Author();
+  isAuthor?: boolean = false;
 }

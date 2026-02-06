@@ -1,5 +1,6 @@
 import {Component, computed, inject, OnInit, signal, input} from '@angular/core';
 import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service"
 import {PostList} from "../post-list/post-list";
 import {Post} from "../../../models/list-post";
 
@@ -15,14 +16,19 @@ export class PostsByEmail implements OnInit{
 
   posts = signal<Post[]>([]);
 
-  authorDb = inject(AuthorHttpClientDb)
+  authorDb = inject(AuthorHttpClientDb);
+
+  isOwnerCheck = inject(AdminOrOwnerCheckService);
 
 
   async ngOnInit() {
     const email = this.email();
     const [author, authorWithPosts]= await Promise.all([this.loadAuthorByEmail(email), await this.loadAuthorWithPosts(email)])
 
-    const posts = authorWithPosts.posts.map(post => ({...post, author:author}));
+    const posts = authorWithPosts.posts.map(post => {
+      const isAuthor = this.isOwnerCheck.isAuthor(author.userId);
+      return {...post, author, isAuthor}
+    });
 
     this.posts.set(posts);
   }

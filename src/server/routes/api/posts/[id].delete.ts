@@ -14,8 +14,7 @@ export default defineEventHandler(async (event) => {
 
   //----> Check for ownership or admin privilege.
   if (!await adminOrOwnerCheckByAuthorId(deletedPost.authorId as string, event)){
-    await sendRedirect(event, '/unauthorized', StatusCodes.FORBIDDEN);
-    return;
+    return await sendRedirect(event, '/unauthorized', StatusCodes.FORBIDDEN);
   }
 
   //----> Return the deleted post.

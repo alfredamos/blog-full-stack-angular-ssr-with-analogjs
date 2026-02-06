@@ -10,6 +10,4 @@ import {RouterLink} from '@angular/router';
   styleUrl: './unauthorized.css',
   standalone: true
 })
-export class Unauthorized {
-
-}
+export class Unauthorized {}

@@ -5,6 +5,7 @@ import {Component, input, output} from '@angular/core';
   imports: [],
   templateUrl: './modal-dialog.html',
   styleUrl: './modal-dialog.css',
+  standalone: true
 })
 export class ModalDialog {
   isOpen = input<boolean>(false);

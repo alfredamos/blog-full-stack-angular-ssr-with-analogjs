@@ -3,11 +3,10 @@ import {PostsByAuthor} from "../../components/posts/posts-by-author/posts-by-aut
 import {RouteMeta} from "@analogjs/router";
 import {ActivatedRoute} from "@angular/router";
 import {authGuard} from "../../guards/authGuard.guard";
-import {isOwnerCheckOrAdminGuard} from "../../guards/isOwnerCheckOrAdminGuard.guard";
 import {PostsByEmail} from "../../components/posts/posts-by-email/posts-by-email";
 
 export const routeMeta: RouteMeta = {
-  canActivate: [authGuard, isOwnerCheckOrAdminGuard],
+  canActivate: [authGuard],
 };
 
 @Component({

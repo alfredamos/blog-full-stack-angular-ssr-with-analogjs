@@ -1,36 +1,34 @@
-import {Component, inject, OnInit, signal} from "@angular/core";
-import { RouteMeta } from '@analogjs/router';
-import { authGuard } from "../../../guards/authGuard.guard";
-import {Post} from "../../../models/list-post";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {BlogContent} from "../../../components/posts/blog-content/blog-content";
-import {DatePipe} from "@angular/common";
-import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
-import {PostHttpClientDb} from "../../../services/post-db-httpClient";
-import {PostDto} from "../../../models/post-dto";
+import {Component, inject, signal} from '@angular/core';
 import {PostDetail} from "../../../models/post-detail";
-
-export const routeMeta: RouteMeta = {
-  canActivate: [authGuard],
-};
+import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service";
+import {PostHttpClientDb} from "../../../services/post-db-httpClient";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Post} from "../../../models/list-post";
+import {PostDto} from "../../../models/post-dto";
+import {Unauthorized} from "../../auth/unauthorized/unauthorized";
+import {BlogContent} from "../blog-content/blog-content";
 
 @Component({
-  selector: "app-edit-post-page",
-  standalone: true,
+  selector: 'app-post-edit',
   imports: [
-    RouterLink,
-    BlogContent,
-    DatePipe,
+    Unauthorized,
+    BlogContent
   ],
-  templateUrl: "post-edit.html"
+  templateUrl: './post-edit.html',
+  styleUrl: './post-edit.css',
+  standalone: true
 })
-export default class EditPostPage implements OnInit{
+export class PostEdit {
   id = "";
+  isNotAuthor = false;
   isEdit = true;
+  idOfAuthor = signal<string>("");
   post = signal<PostDetail>(new PostDetail());
 
   authorDb = inject(AuthorHttpClientDb);
 
+  isOwnerOrAdmin = inject(AdminOrOwnerCheckService)
   postDb = inject(PostHttpClientDb)
 
   router = inject(Router);
@@ -44,11 +42,19 @@ export default class EditPostPage implements OnInit{
     console.log("In edit-post-page, post", onePost);
     const author = await this.loadAuthor(onePost.author?.id);
 
+    this.idOfAuthor.set(author.id);
+
     const post = {...onePost, author: author};
     console.log("In edit-post-page, author", author);
 
     this.post.set(post);
 
+    if (!await this.isOwnerOrAdmin.checkOwnerAndAdminByAuthorId(this.idOfAuthor())){
+      console.log("###### In edit-post-page, not owner or admin #######");
+      this.isNotAuthor= true;
+      this.router.navigate(['/unauthorized']).then().catch(console.error);
+      return;
+    }
   }
 
   async loadAuthor(id: string) {

@@ -1,8 +1,10 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input} from '@angular/core';
 import {Post} from "../../../models/list-post"
 import {RouterLink} from "@angular/router";
 import {BlogContent} from "../blog-content/blog-content";
-import {DatePipe} from "@angular/common";
+import {AsyncPipe, DatePipe} from "@angular/common";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service"
+import {AuthService} from "../../../services/auth-service";
 
 @Component({
   selector: 'app-post-list',
@@ -13,8 +15,13 @@ import {DatePipe} from "@angular/common";
   ],
   templateUrl: './post-list.html',
   styleUrl: './post-list.css',
+  standalone: true
 })
 export class PostList {
   authorsWithPosts = input.required<Post[]>();
+
+
+
+
 
 }

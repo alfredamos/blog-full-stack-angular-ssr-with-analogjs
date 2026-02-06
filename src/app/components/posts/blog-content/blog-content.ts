@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
   ],
   templateUrl: './blog-content.html',
   styleUrl: './blog-content.css',
+  standalone: true
 })
 export class BlogContent implements OnInit, OnChanges{
   content = input.required<string>();

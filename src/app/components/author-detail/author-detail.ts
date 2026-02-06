@@ -15,6 +15,7 @@ import { AuthorHttpClientDb } from '../../services/author-db-httpClient';
   ],
   templateUrl: './author-detail.html',
   styleUrl: './author-detail.css',
+  standalone: true
 })
 export class AuthorDetail implements OnInit{
   id = "";

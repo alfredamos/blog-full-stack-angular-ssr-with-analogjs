@@ -13,6 +13,7 @@ import { UserHttpClientDb } from '../../../services/user-db-httpClient';
   ],
   templateUrl: './detail-user.html',
   styleUrl: './detail-user.css',
+  standalone: true
 })
 export class DetailUser implements OnInit{
   userId = "";
