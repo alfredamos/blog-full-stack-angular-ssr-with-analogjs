@@ -18,13 +18,9 @@ export async function adminOrOwnerCheckByAuthorId(authorId: string, event: H3Eve
   //----> Check for admin role.
   const isAdmin = session?.role === Role.Admin;
 
-  console.log("In Admin or owner-check, isAdmin : ", isAdmin);
-  console.log("In Admin or owner-check, isSame : ", isSameUser);
-
   if (!isAdmin && !isSameUser) {
     return false;
   }
 
-  console.log("@@@@@@ is either an admin or the owner of the resource @@@@@@@@@")
   return true;
 }

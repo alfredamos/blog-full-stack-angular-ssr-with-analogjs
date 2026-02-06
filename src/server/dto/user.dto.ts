@@ -2,8 +2,6 @@ import {Role} from "../../generated/prisma/enums";
 import {Author} from "../../app/models/Author";
 import {User} from "./user";
 
-//import {User, Author} from "../../generated/prisma/client";
-
 export class UserDto {
     id: string = "";
     name: string = "";

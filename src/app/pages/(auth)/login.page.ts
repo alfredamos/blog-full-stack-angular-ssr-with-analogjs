@@ -23,7 +23,6 @@ export default class LoginPage{
   }
 
   async submitLoginForm(loginUserModel: LoginUserModel) {
-    console.log("In login-page, submitLoginForm", loginUserModel);
     await this.authDb.loginUser(loginUserModel);
     await this.router.navigate(["/"])
   }

@@ -16,7 +16,6 @@ export class AdminOrOwnerCheckService {
   }
 
   isAuthor(userId: string){
-    //if (!user) return false;
     const currentUser = this.authService.userCurrent;
 
     return currentUser()?.id?.normalize() === userId?.normalize();
@@ -37,15 +36,10 @@ export class AdminOrOwnerCheckService {
     //----> Check for admin role.
     const isAdmin = currentUser()?.role === Role.Admin;
 
-    console.log("In Admin or owner-check*****, isAdmin : ", isAdmin);
-    console.log("In Admin or owner-check*****, isSame : ", isSameUser);
-
     if (!isAdmin && !isSameUser) {
-      console.log("In Admin or owner-check*****, Not good at all!");
       return false
     }
 
-    console.log("In Admin or owner-check*****, very very good at all!");
     return true;
   }
 }

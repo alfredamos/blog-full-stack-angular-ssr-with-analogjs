@@ -32,17 +32,14 @@ export class UserService {
 
   getLocalStorage(){
     return JSON.parse(this.storageService.get(LocalStorageKey.userKey) as string) as User[] ?? [];
-    //return JSON.parse(localStorage.getItem(LocalStorageKey.userKey) as string) as User[] ?? [];
   }
 
   removeStorage(){
     this.storageService.remove(LocalStorageKey.userKey);
-    //localStorage.removeItem(LocalStorageKey.userKey);
   }
 
   findUserByEmail(email: string) {
     return (this.usersState()?.find(user => user.email === email) ?? this.getLocalStorage()?.find(user => user.email === email)) as User;
   }
-
 
 }

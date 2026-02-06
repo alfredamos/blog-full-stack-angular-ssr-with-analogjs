@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
   //----> Get the post by id.
   const post = await postModel.getPostById(id);
 
-  console.log("In the right place in post-get route!");
   //----> Return the post.
   return post;
 });

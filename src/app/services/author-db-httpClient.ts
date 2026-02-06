@@ -104,7 +104,6 @@ export class AuthorHttpClientDb {
     this.error.set(null);
     try {
       const authorWithPosts = await this.apiHttpClientService.get<AuthorWithPosts>(`/authors/get-author-posts-by-user-id/${userId}`)
-      console.log("In get-authors, author-http-client, authorWithPosts : ", authorWithPosts);
       return authorWithPosts
     } catch (err: any) {
       this.error.set(err.message);

@@ -24,8 +24,6 @@ export class NavigationBar{
 
   isMenuOpen = false;
 
-
-
   toggleMenu(){
     this.isMenuOpen = !this.isMenuOpen;
   }

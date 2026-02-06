@@ -23,7 +23,6 @@ export class SettingsDropDown implements OnInit{
   async ngOnInit(){
     const userId = await this.getCurrentUser();
     this.idOfUser.set(userId);
-    console.log("In settings-drop-down, userId : ", userId)
   }
 
   refreshUserToken() {

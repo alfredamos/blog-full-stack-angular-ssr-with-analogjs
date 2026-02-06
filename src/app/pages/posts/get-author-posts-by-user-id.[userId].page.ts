@@ -17,8 +17,4 @@ export const routeMeta: RouteMeta = {
   template: `
     <app-posts-by-author/>`
 })
-export default class GetPostsByUserIdPage implements OnInit{
-  ngOnInit(): void {
-    console.log("This is plain one, In get-posts-by-user-id-page")
-  }
-}
+export default class GetPostsByUserIdPage{}

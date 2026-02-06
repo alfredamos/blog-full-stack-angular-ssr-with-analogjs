@@ -71,7 +71,6 @@ export class UserHttpClientDb {
   }
 
   private updateUsers(newUsers: User[]) {
-    //const newUsers = this.userService.users()?.filter(user => user.id !== userData.id);
     this.data.set(newUsers);
     this.userService.updateUsers(newUsers);
     this.userService.setLocalStorage(newUsers);

@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const route = event.node.req.originalUrl!;
   const session = authModel.getSession(event);
   if (!isPublicRoute(route) && !session?.isLoggedIn) {
-    console.log("route is public, route : ", route);
     await sendRedirect(event, '/login', StatusCodes.UNAUTHORIZED);
   }
 });

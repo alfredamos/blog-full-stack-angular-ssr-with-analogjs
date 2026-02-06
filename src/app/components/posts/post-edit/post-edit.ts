@@ -37,20 +37,18 @@ export class PostEdit {
   async ngOnInit() {
 
     this.id = this.route.snapshot.params['id'];
-    console.log("In edit-post-page, id", this.id);
+
     const onePost = await this.loadPost(this.id);
-    console.log("In edit-post-page, post", onePost);
+
     const author = await this.loadAuthor(onePost.author?.id);
 
     this.idOfAuthor.set(author.id);
 
     const post = {...onePost, author: author};
-    console.log("In edit-post-page, author", author);
 
     this.post.set(post);
 
     if (!await this.isOwnerOrAdmin.checkOwnerAndAdminByAuthorId(this.idOfAuthor())){
-      console.log("###### In edit-post-page, not owner or admin #######");
       this.isNotAuthor= true;
       this.router.navigate(['/unauthorized']).then().catch(console.error);
       return;
@@ -72,7 +70,7 @@ export class PostEdit {
   async changeContent(content: string) {
     const post = {...this.post(), content};
     const editedPost = this.makePost(post);
-    console.log("In edit-post-page, post", post);
+
     await this.postDb.editPostById(this.id, editedPost);
     this.router.navigate(['/posts']).then().catch(console.error);
   }
