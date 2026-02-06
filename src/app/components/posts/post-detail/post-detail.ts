@@ -1,6 +1,7 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {PostHttpClientDb} from "../../../services/post-db-httpClient";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service"
 import {PostDetail as Post} from "../../../models/post-detail";
 import {ModalDialog} from "../../utils/modal-dialog/modal-dialog";
 
@@ -21,6 +22,8 @@ export class PostDetail implements OnInit{
   post = signal<Post>(new Post());
   postDb = inject(PostHttpClientDb);
 
+  isOrOwner = inject(AdminOrOwnerCheckService);
+
   router = inject(Router);
   route = inject(ActivatedRoute);
 
@@ -28,8 +31,6 @@ export class PostDetail implements OnInit{
     this.id = this.route.snapshot.params['id'];
 
     const post = await this.loadPost();
-
-    console.log("###### In detail-post-page, post is: #######", this.idOfAuthor());
 
     this.post.set(post);
 

@@ -7,6 +7,7 @@ import {BlogContent} from "../../../components/posts/blog-content/blog-content";
 import {DatePipe} from "@angular/common";
 import {AuthorHttpClientDb} from "../../../services/author-db-httpClient";
 import {PostHttpClientDb} from "../../../services/post-db-httpClient";
+import {AdminOrOwnerCheckService} from "../../../services/adminOrOwnerCheck.service";
 import {PostDto} from "../../../models/post-dto";
 import {PostDetail} from "../../../models/post-detail";
 
@@ -31,6 +32,8 @@ export default class EditPostPage implements OnInit{
 
   authorDb = inject(AuthorHttpClientDb);
 
+  isOwner = inject(AdminOrOwnerCheckService);
+
   postDb = inject(PostHttpClientDb)
 
   router = inject(Router);
@@ -39,13 +42,14 @@ export default class EditPostPage implements OnInit{
   async ngOnInit() {
 
     this.id = this.route.snapshot.params['id'];
-    console.log("In edit-post-page, id", this.id);
+
     const onePost = await this.loadPost(this.id);
-    console.log("In edit-post-page, post", onePost);
+
     const author = await this.loadAuthor(onePost.author?.id);
 
-    const post = {...onePost, author: author};
-    console.log("In edit-post-page, author", author);
+    const isAuthor = await this.isOwner.isAuthor(author.userId);
+
+    const post = {...onePost, author, isAuthor};
 
     this.post.set(post);
 
@@ -66,7 +70,7 @@ export default class EditPostPage implements OnInit{
   async changeContent(content: string) {
     const post = {...this.post(), content};
     const editedPost = this.makePost(post);
-    console.log("In edit-post-page, post", post);
+
     await this.postDb.editPostById(this.id, editedPost);
     this.router.navigate(['/posts']).then().catch(console.error);
   }
